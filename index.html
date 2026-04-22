@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aprendendo Juntos 🌈</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════
+   GLOBAL RESET
+═══════════════════════════════════════ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; background: #FFF9F0; }
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+.main-nav {
+  background: linear-gradient(135deg, #FF6B9D, #FF9A3C, #9B5DE5);
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.18);
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  gap: 16px;
+}
+.nav-brand {
+  font-family: 'Fredoka One', cursive;
+  color: white;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+  white-space: nowrap;
+}
+.nav-tabs { display: flex; gap: 8px; }
+.nav-tab {
+  padding: 8px 20px;
+  border: 2.5px solid rgba(255,255,255,0.6);
+  background: transparent;
+  color: rgba(255,255,255,0.9);
+  border-radius: 24px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s, border-color 0.2s;
+  white-space: nowrap;
+}
+.nav-tab:hover {
+  background: rgba(255,255,255,0.18);
+  transform: translateY(-1px);
+}
+.nav-tab.active {
+  background: white;
+  color: #9B5DE5;
+  border-color: white;
+}
+@media (max-width: 520px) {
+  .nav-brand { font-size: 14px; }
+  .nav-tab { padding: 7px 13px; font-size: 12.5px; }
+}
+@media (max-width: 380px) {
+  .nav-brand { display: none; }
+}
+
+/* ═══════════════════════════════════════
+   PAGE VISIBILITY
+═══════════════════════════════════════ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ═══════════════════════════════════════
+   APP 1 — SÍLABAS (CARTÕES)
+   All rules scoped under .app-silabas
+═══════════════════════════════════════ */
+.app-silabas {
+  font-family: 'Nunito', sans-serif;
+  background: #FFF9F0;
+  min-height: calc(100vh - 60px);
+  padding: 20px 20px 48px;
+}
+
+/* ── HEADER ── */
+.app-silabas .page-header {
+  text-align: center;
+  padding: 30px 20px 22px;
+  background: linear-gradient(135deg, #FF6B9D, #FF9A3C, #FFD166, #06D6A0, #118AB2, #9B5DE5);
+  border-radius: 24px;
+  margin-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+}
+.app-silabas .page-header::before {
+  content: '';
+  position: absolute;
+  inset: -30px;
+  background: repeating-linear-gradient(45deg,
+    rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 2px,
+    transparent 2px, transparent 20px);
+}
+.app-silabas .page-header h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 50px; color: white;
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+  letter-spacing: 2px; position: relative;
+}
+.app-silabas .page-header p {
+  color: rgba(255,255,255,0.92); font-size: 17px;
+  font-weight: 700; margin-top: 6px; position: relative;
+}
+.app-silabas .stars { font-size: 26px; margin-bottom: 6px; }
+.app-silabas .progress-wrap {
+  margin-top: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  position: relative;
+}
+.app-silabas .progress-bar-bg {
+  width: 260px; height: 14px;
+  background: rgba(255,255,255,0.3); border-radius: 99px; overflow: hidden;
+}
+.app-silabas .progress-bar-fill {
+  height: 100%; background: white; border-radius: 99px;
+  width: 0%; transition: width 0.5s cubic-bezier(.34,1.56,.64,1);
+}
+.app-silabas .progress-label { font-size: 13px; font-weight: 800; color: white; min-width: 44px; }
+
+/* ── GRID ── */
+.app-silabas .cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── CARD ── */
+.app-silabas .syl-card {
+  background: white;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 4px 22px rgba(0,0,0,0.09);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.app-silabas .syl-card.all-done { opacity: 0.36; transform: scale(0.982); }
+.app-silabas .syl-card.all-done .card-header { filter: saturate(0.3); }
+
+.app-silabas .card-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 15px 18px; color: white;
+  cursor: pointer; user-select: none;
+  transition: filter 0.3s;
+}
+.app-silabas .card-header:hover { filter: brightness(1.06); }
+
+.app-silabas .card-num {
+  font-family: 'Fredoka One', cursive; font-size: 22px;
+  background: rgba(255,255,255,0.22);
+  width: 46px; height: 46px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 12px; flex-shrink: 0;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.18);
+}
+.app-silabas .card-title-wrap { flex: 1; min-width: 0; }
+.app-silabas .card-title { font-family: 'Fredoka One', cursive; font-size: 19px; text-shadow: 1px 1px 0 rgba(0,0,0,0.15); }
+.app-silabas .card-preview { font-size: 11.5px; font-weight: 700; opacity: 0.82; margin-top: 3px; letter-spacing: 0.4px; }
+
+.app-silabas .card-done-btn {
+  flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,0.22); border: 2.5px solid rgba(255,255,255,0.65);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 900; color: rgba(255,255,255,0.85);
+  transition: background 0.2s, transform 0.18s; user-select: none;
+}
+.app-silabas .card-done-btn:hover { background: rgba(255,255,255,0.38); transform: scale(1.12); }
+.app-silabas .card-done-btn.done { background: white; border-color: white; }
+.app-silabas .card-done-btn .i-e { display: block; }
+.app-silabas .card-done-btn .i-d { display: none; }
+.app-silabas .card-done-btn.done .i-e { display: none; }
+.app-silabas .card-done-btn.done .i-d { display: block; }
+
+.app-silabas .chevron {
+  flex-shrink: 0; font-size: 13px; opacity: 0.75; margin-left: -2px;
+  transition: transform 0.28s cubic-bezier(.34,1.56,.64,1);
+}
+.app-silabas .syl-card.open .chevron { transform: rotate(180deg); }
+
+/* ── BODY ── */
+.app-silabas .card-body { max-height: 0; overflow: hidden; transition: max-height 0.42s cubic-bezier(0.4,0,0.2,1); }
+.app-silabas .syl-card.open .card-body { max-height: 700px; }
+
+.app-silabas .mini-progress {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 18px 2px;
+}
+.app-silabas .mini-bg { flex: 1; height: 6px; background: #F0F0F0; border-radius: 99px; overflow: hidden; }
+.app-silabas .mini-fill { height: 100%; border-radius: 99px; width: 0%; transition: width 0.4s ease; }
+.app-silabas .mini-lbl { font-size: 11px; font-weight: 800; min-width: 30px; text-align: right; }
+
+.app-silabas .card-rows { padding: 8px 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+
+/* ── SYLLABLE ROW ── */
+.app-silabas .syl-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 14px; border-radius: 14px;
+  cursor: pointer; user-select: none;
+  transition: opacity 0.3s, transform 0.18s, filter 0.3s;
+}
+.app-silabas .syl-row:hover { transform: translateX(4px); }
+.app-silabas .syl-row.done { opacity: 0.28; filter: saturate(0.12); }
+
+.app-silabas .syl-big {
+  font-family: 'Fredoka One', cursive;
+  font-size: 32px;
+  letter-spacing: 1px;
+  flex: 1;
+  line-height: 1;
+}
+.app-silabas .syl-fam {
+  font-size: 11px; font-weight: 800;
+  opacity: 0.55; letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* ── RESULT BUTTONS ── */
+.app-silabas .result-btns { display: flex; gap: 5px; flex-shrink: 0; }
+.app-silabas .rb {
+  width: 32px; height: 32px; border-radius: 10px;
+  border: 2px solid; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 900;
+  background: transparent;
+  opacity: 0.28;
+  transition: background 0.18s, opacity 0.2s, transform 0.18s, box-shadow 0.18s;
+  user-select: none;
+  flex-shrink: 0;
+}
+.app-silabas .rb:hover { opacity: 0.75; transform: scale(1.12); }
+.app-silabas .rb-ok  { border-color: #27AE60; color: #27AE60; }
+.app-silabas .rb-ok.active {
+  background: #27AE60; color: white; opacity: 1;
+  box-shadow: 0 2px 8px rgba(39,174,96,0.35);
+}
+.app-silabas .rb-err { border-color: #E74C3C; color: #E74C3C; }
+.app-silabas .rb-err.active {
+  background: #E74C3C; color: white; opacity: 1;
+  box-shadow: 0 2px 8px rgba(231,76,60,0.35);
+}
+
+/* Row tints */
+.app-silabas .syl-row.res-ok  {
+  background: #F0FFF4 !important;
+  border-left: 4px solid #2ECC71;
+  padding-left: 10px;
+}
+.app-silabas .syl-row.res-err {
+  background: #FFF5F5 !important;
+  border-left: 4px solid #E74C3C;
+  padding-left: 10px;
+}
+
+/* ── Check button ── */
+.app-silabas .syl-check {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+  border: 2.5px solid currentColor;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900;
+  background: transparent; opacity: 0.38;
+  color: inherit; transition: background 0.18s, opacity 0.18s, transform 0.18s;
+  user-select: none;
+}
+.app-silabas .syl-check:hover { opacity: 1; transform: scale(1.18); }
+.app-silabas .syl-check.done { background: currentColor; opacity: 1; }
+.app-silabas .syl-check .i-e { display: block; font-size: 10px; }
+.app-silabas .syl-check .i-d { display: none; color: white; }
+.app-silabas .syl-check.done .i-e { display: none; }
+.app-silabas .syl-check.done .i-d { display: block; }
+
+/* ── THEMES ── */
+.app-silabas .t1 .card-header  { background: linear-gradient(135deg,#FF4757,#FF6B81); }
+.app-silabas .t1 .card-done-btn.done { color: #FF4757; }
+.app-silabas .t1 .syl-row      { background: #FFF0F2; color: #C0392B; }
+.app-silabas .t1 .mini-fill    { background: #FF4757; }
+.app-silabas .t1 .mini-lbl     { color: #FF4757; }
+
+.app-silabas .t2 .card-header  { background: linear-gradient(135deg,#FF7043,#FFAB91); }
+.app-silabas .t2 .card-done-btn.done { color: #FF7043; }
+.app-silabas .t2 .syl-row      { background: #FFF3F0; color: #BF360C; }
+.app-silabas .t2 .mini-fill    { background: #FF7043; }
+.app-silabas .t2 .mini-lbl     { color: #FF7043; }
+
+.app-silabas .t3 .card-header  { background: linear-gradient(135deg,#1E90FF,#74B9FF); }
+.app-silabas .t3 .card-done-btn.done { color: #1E90FF; }
+.app-silabas .t3 .syl-row      { background: #F0F8FF; color: #0D3B6E; }
+.app-silabas .t3 .mini-fill    { background: #1E90FF; }
+.app-silabas .t3 .mini-lbl     { color: #1E90FF; }
+
+.app-silabas .t4 .card-header  { background: linear-gradient(135deg,#9B59B6,#C39BD3); }
+.app-silabas .t4 .card-done-btn.done { color: #9B59B6; }
+.app-silabas .t4 .syl-row      { background: #FBF0FF; color: #6C3483; }
+.app-silabas .t4 .mini-fill    { background: #9B59B6; }
+.app-silabas .t4 .mini-lbl     { color: #9B59B6; }
+
+.app-silabas .t5 .card-header  { background: linear-gradient(135deg,#2ED573,#7BED9F); }
+.app-silabas .t5 .card-done-btn.done { color: #27AE60; }
+.app-silabas .t5 .syl-row      { background: #F0FFF6; color: #1B6B3A; }
+.app-silabas .t5 .mini-fill    { background: #2ED573; }
+.app-silabas .t5 .mini-lbl     { color: #27AE60; }
+
+.app-silabas .footer {
+  text-align: center; padding: 28px;
+  font-size: 14px; color: #bbb; font-weight: 600; margin-top: 10px;
+}
+
+/* ═══════════════════════════════════════
+   APP 2 — PALAVRAS (CARTÕES MISTOS)
+   All rules scoped under .app-palavras
+═══════════════════════════════════════ */
+.app-palavras {
+  --bg: #fff8ef;
+  --ink: #3c2f2f;
+  --muted: #7f6d6d;
+  --card: #ffffff;
+  --shadow: 0 10px 30px rgba(0,0,0,.08);
+  --radius-xl: 26px;
+  --radius-lg: 20px;
+  --radius-md: 16px;
+  font-family: 'Nunito', sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255,214,102,.22), transparent 30%),
+    radial-gradient(circle at top right, rgba(17,138,178,.16), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(155,93,229,.10), transparent 24%),
+    var(--bg);
+  color: var(--ink);
+  min-height: calc(100vh - 60px);
+  padding: 20px;
+}
+.app-palavras .app {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.app-palavras .hero {
+  background: linear-gradient(135deg, #ff6b9d, #ff9a3c, #ffd166, #06d6a0, #118ab2, #9b5de5);
+  border-radius: 30px;
+  padding: 28px 24px 22px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.app-palavras .hero::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  background: repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 2px, transparent 2px 20px);
+}
+.app-palavras .hero > * { position: relative; }
+.app-palavras .hero h1 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,.12);
+}
+.app-palavras .hero p {
+  font-size: 1.05rem;
+  font-weight: 800;
+  opacity: .96;
+}
+.app-palavras .progress-row {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.app-palavras .progress-bar {
+  width: min(360px, 100%);
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.28);
+  overflow: hidden;
+}
+.app-palavras .progress-fill {
+  height: 100%;
+  width: 0;
+  background: #fff;
+  border-radius: inherit;
+  transition: width .35s ease;
+}
+.app-palavras .progress-label {
+  font-weight: 900;
+  min-width: 54px;
+}
+.app-palavras .screen { display: none; }
+.app-palavras .screen.active { display: block; }
+.app-palavras .toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 18px;
+  flex-wrap: wrap;
+}
+.app-palavras .toolbar h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.6rem;
+}
+.app-palavras .toolbar p {
+  color: var(--muted);
+  font-weight: 700;
+}
+.app-palavras .sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 20px;
+}
+.app-palavras .section-card {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid rgba(0,0,0,.03);
+  transition: transform .18s ease, box-shadow .18s ease, opacity .25s ease;
+}
+.app-palavras .section-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0,0,0,.11);
+}
+.app-palavras .section-card.completed { opacity: .58; }
+.app-palavras .section-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.app-palavras .section-badge {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.2rem;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 18px;
+  min-width: 110px;
+  text-align: center;
+}
+.app-palavras .section-check {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1rem;
+  opacity: .72;
+}
+.app-palavras .section-check.is-done { color: #fff; opacity: 1; }
+.app-palavras .section-card h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.22rem;
+}
+.app-palavras .section-meta {
+  color: var(--muted);
+  font-size: .95rem;
+  font-weight: 800;
+}
+.app-palavras .chip-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.app-palavras .chip {
+  padding: 8px 11px;
+  border-radius: 999px;
+  font-size: .87rem;
+  font-weight: 800;
+  background: #f5f2ff;
+  color: #5b4f72;
+}
+.app-palavras .section-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.app-palavras .open-btn {
+  border: none;
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 12px 16px;
+  color: #fff;
+  font-weight: 900;
+  font-size: .96rem;
+  flex: 1;
+}
+.app-palavras .mini-progress {
+  font-size: .84rem;
+  font-weight: 900;
+  color: var(--muted);
+  min-width: 72px;
+  text-align: right;
+}
+.app-palavras .detail-shell { margin-top: 24px; }
+.app-palavras .detail-header {
+  background: #fff;
+  border-radius: 28px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
+}
+.app-palavras .back-btn {
+  border: none;
+  background: #efe9ff;
+  color: #5f4eb3;
+  padding: 11px 14px;
+  border-radius: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.app-palavras .detail-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.app-palavras .detail-title-group h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  margin-bottom: 6px;
+}
+.app-palavras .detail-title-group p {
+  color: var(--muted);
+  font-weight: 800;
+}
+.app-palavras .detail-check {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1.2rem;
+}
+.app-palavras .detail-check.is-done { color: #fff; }
+.app-palavras .word-list { display: grid; gap: 14px; }
+.app-palavras .word-panel {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.03);
+  transition: opacity .25s ease, transform .18s ease;
+}
+.app-palavras .word-panel.completed { opacity: .62; }
+.app-palavras .word-panel.expanded { transform: scale(1.01); }
+.app-palavras .word-summary {
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+.app-palavras .word-summary:hover { background: rgba(0,0,0,.015); }
+.app-palavras .word-pill {
+  min-width: 66px;
+  height: 56px;
+  border-radius: 16px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.12);
+}
+.app-palavras .word-main { flex: 1; min-width: 0; }
+.app-palavras .word-main h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.35rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+.app-palavras .word-main p {
+  color: var(--muted);
+  font-weight: 800;
+  margin-top: 2px;
+}
+.app-palavras .word-actions { display: flex; align-items: center; gap: 10px; }
+.app-palavras .expand-hint {
+  font-size: .76rem;
+  font-weight: 900;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.app-palavras .word-check {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 900;
+  opacity: .75;
+}
+.app-palavras .word-check.is-done { color: #fff; opacity: 1; }
+.app-palavras .word-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+  background: linear-gradient(180deg, rgba(0,0,0,.01), rgba(0,0,0,0));
+}
+.app-palavras .word-panel.expanded .word-body { max-height: 380px; }
+.app-palavras .word-body-inner {
+  padding: 0 18px 20px 18px;
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  text-align: center;
+}
+.app-palavras .word-illustration {
+  width: min(230px, 100%);
+  min-height: 190px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #faf6ff;
+  font-size: clamp(4rem, 8vw, 7rem);
+  border: 2px solid rgba(0,0,0,.04);
+  margin-top: 8px;
+}
+.app-palavras .big-word {
+  font-family: 'Fredoka', sans-serif;
+  text-transform: uppercase;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+}
+.app-palavras .word-caption {
+  font-size: 1rem;
+  color: var(--muted);
+  font-weight: 800;
+}
+.app-palavras .footer {
+  text-align: center;
+  color: #9b8b8b;
+  font-weight: 800;
+  padding: 28px 0 8px;
+}
+@media (max-width: 720px) {
+  .app-palavras { padding: 14px; }
+  .app-palavras .hero { border-radius: 24px; }
+  .app-palavras .word-summary { align-items: flex-start; }
+  .app-palavras .word-actions { flex-direction: column; }
+  .app-palavras .section-top { align-items: flex-start; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     NAVIGATION
+══════════════════════════════════ -->
+<nav class="main-nav">
+  <div class="nav-inner">
+    <span class="nav-brand">🌈 Aprendendo Juntos</span>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-page="silabas">🔤 Sílabas</button>
+      <button class="nav-tab" data-page="palavras">📚 Palavras</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════
+     PAGE 1 — SÍLABAS
+══════════════════════════════════ -->
+<div id="page-silabas" class="page active app-silabas">
+
+<div class="page-header">
+  <div class="stars">⭐ 🌈 ⭐</div>
+  <h1>Minhas Sílabas</h1>
+  <p>Clique em um cartão para abrir e praticar!</p>
+  <div class="progress-wrap">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="gfill"></div></div>
+    <div class="progress-label" id="glabel">0%</div>
+  </div>
+</div>
+
+<div class="cards-grid">
+
+  <!-- ── CARTÃO 1 — BA · DI · FE · GA · LE ── -->
+  <div class="syl-card t1" data-card="1">
+    <div class="card-header">
+      <div class="card-num">1</div>
+      <div class="card-title-wrap">
+        <div class="card-title">Cartão 1</div>
+        <div class="card-preview">BA · DI · FE · GA · LE</div>
+      </div>
+      <button class="card-done-btn" data-action="ctoggle"><span class="i-e">○</span><span class="i-d">✓</span></button>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="mini-progress">
+        <div class="mini-bg"><div class="mini-fill" id="mf-1"></div></div>
+        <div class="mini-lbl" id="ml-1">0/5</div>
+      </div>
+      <div class="card-rows">
+        <div class="syl-row" data-syl="BA"><div class="syl-big">BA</div><div class="syl-fam">B</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="DI"><div class="syl-big">DI</div><div class="syl-fam">D</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="FE"><div class="syl-big">FE</div><div class="syl-fam">F</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="GA"><div class="syl-big">GA</div><div class="syl-fam">G</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="LE"><div class="syl-big">LE</div><div class="syl-fam">L</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CARTÃO 2 — BE · DU · FU · GE · LA ── -->
+  <div class="syl-card t2" data-card="2">
+    <div class="card-header">
+      <div class="card-num">2</div>
+      <div class="card-title-wrap">
+        <div class="card-title">Cartão 2</div>
+        <div class="card-preview">BE · DU · FU · GE · LA</div>
+      </div>
+      <button class="card-done-btn" data-action="ctoggle"><span class="i-e">○</span><span class="i-d">✓</span></button>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="mini-progress">
+        <div class="mini-bg"><div class="mini-fill" id="mf-2"></div></div>
+        <div class="mini-lbl" id="ml-2">0/5</div>
+      </div>
+      <div class="card-rows">
+        <div class="syl-row" data-syl="BE"><div class="syl-big">BE</div><div class="syl-fam">B</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="DU"><div class="syl-big">DU</div><div class="syl-fam">D</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="FU"><div class="syl-big">FU</div><div class="syl-fam">F</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="GE"><div class="syl-big">GE</div><div class="syl-fam">G</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="LA"><div class="syl-big">LA</div><div class="syl-fam">L</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CARTÃO 3 — BU · GI · LI · MA · PA ── -->
+  <div class="syl-card t3" data-card="3">
+    <div class="card-header">
+      <div class="card-num">3</div>
+      <div class="card-title-wrap">
+        <div class="card-title">Cartão 3</div>
+        <div class="card-preview">BU · GI · LI · MA · PA</div>
+      </div>
+      <button class="card-done-btn" data-action="ctoggle"><span class="i-e">○</span><span class="i-d">✓</span></button>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="mini-progress">
+        <div class="mini-bg"><div class="mini-fill" id="mf-3"></div></div>
+        <div class="mini-lbl" id="ml-3">0/5</div>
+      </div>
+      <div class="card-rows">
+        <div class="syl-row" data-syl="BU"><div class="syl-big">BU</div><div class="syl-fam">B</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="GI"><div class="syl-big">GI</div><div class="syl-fam">G</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="LI"><div class="syl-big">LI</div><div class="syl-fam">L</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="MA"><div class="syl-big">MA</div><div class="syl-fam">M</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="PA"><div class="syl-big">PA</div><div class="syl-fam">P</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CARTÃO 4 — GU · LO · ME · PE · TA ── -->
+  <div class="syl-card t4" data-card="4">
+    <div class="card-header">
+      <div class="card-num">4</div>
+      <div class="card-title-wrap">
+        <div class="card-title">Cartão 4</div>
+        <div class="card-preview">GU · LO · ME · PE · TA</div>
+      </div>
+      <button class="card-done-btn" data-action="ctoggle"><span class="i-e">○</span><span class="i-d">✓</span></button>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="mini-progress">
+        <div class="mini-bg"><div class="mini-fill" id="mf-4"></div></div>
+        <div class="mini-lbl" id="ml-4">0/5</div>
+      </div>
+      <div class="card-rows">
+        <div class="syl-row" data-syl="GU"><div class="syl-big">GU</div><div class="syl-fam">G</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="LO"><div class="syl-big">LO</div><div class="syl-fam">L</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="ME"><div class="syl-big">ME</div><div class="syl-fam">M</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="PE"><div class="syl-big">PE</div><div class="syl-fam">P</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="TA"><div class="syl-big">TA</div><div class="syl-fam">T</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CARTÃO 5 — LU · PU · TE · TI · TO · VI ── -->
+  <div class="syl-card t5" data-card="5">
+    <div class="card-header">
+      <div class="card-num">5</div>
+      <div class="card-title-wrap">
+        <div class="card-title">Cartão 5</div>
+        <div class="card-preview">LU · PU · TE · TI · TO · VI</div>
+      </div>
+      <button class="card-done-btn" data-action="ctoggle"><span class="i-e">○</span><span class="i-d">✓</span></button>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="mini-progress">
+        <div class="mini-bg"><div class="mini-fill" id="mf-5"></div></div>
+        <div class="mini-lbl" id="ml-5">0/6</div>
+      </div>
+      <div class="card-rows">
+        <div class="syl-row" data-syl="LU"><div class="syl-big">LU</div><div class="syl-fam">L</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="PU"><div class="syl-big">PU</div><div class="syl-fam">P</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="TE"><div class="syl-big">TE</div><div class="syl-fam">T</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="TI"><div class="syl-big">TI</div><div class="syl-fam">T</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="TO"><div class="syl-big">TO</div><div class="syl-fam">T</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+        <div class="syl-row" data-syl="VI"><div class="syl-big">VI</div><div class="syl-fam">V</div><div class="result-btns"><button class="rb rb-ok" data-action="ok" title="Acertou">✓</button><button class="rb rb-err" data-action="err" title="Errou">✗</button></div><button class="syl-check" data-action="rtoggle"><span class="i-e">○</span><span class="i-d">✓</span></button></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">🌟 Parabéns! Você está aprendendo muito! 🌟</div>
+
+</div><!-- /page-silabas -->
+
+
+<!-- ══════════════════════════════════
+     PAGE 2 — PALAVRAS
+══════════════════════════════════ -->
+<div id="page-palavras" class="page app-palavras">
+<div class="app">
+  <header class="hero">
+    <div style="font-size: 1.8rem; margin-bottom: 8px;">🌈 ⭐ 📚</div>
+    <h1>Minhas Palavras</h1>
+    <p>Cartões com palavras misturadas para estudar, marcar e revisar.</p>
+    <div class="progress-row">
+      <div class="progress-bar"><div class="progress-fill" id="global-progress-fill"></div></div>
+      <div class="progress-label" id="global-progress-label">0%</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen active" id="overview-screen">
+      <div class="toolbar">
+        <div>
+          <h2>Cartões de estudo</h2>
+          <p>Cada cartão reúne palavras misturadas. Clique para abrir os detalhes.</p>
+        </div>
+      </div>
+      <div class="sections-grid" id="sections-grid"></div>
+    </section>
+
+    <section class="screen" id="detail-screen">
+      <div class="detail-shell">
+        <div class="detail-header">
+          <button class="back-btn" id="back-btn">← Voltar para os cartões</button>
+          <div class="detail-hero">
+            <div class="detail-title-group">
+              <h2 id="detail-title">Cartão</h2>
+              <p id="detail-subtitle">Palavras do cartão</p>
+            </div>
+            <button class="detail-check" id="detail-toggle" title="Marcar cartão todo">○</button>
+          </div>
+        </div>
+        <div class="word-list" id="word-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">Feito em um único arquivo HTML, com progresso salvo no navegador. ✨</footer>
+</div>
+</div><!-- /page-palavras -->
+
+
+<!-- ══════════════════════════════════
+     NAVIGATION SCRIPT
+══════════════════════════════════ -->
+<script>
+(function() {
+  const NAV_KEY = 'aprendendo_active_page_v1';
+  const tabs  = document.querySelectorAll('.nav-tab');
+  const pages = document.querySelectorAll('.page');
+
+  function showPage(id) {
+    pages.forEach(function(p) { p.classList.remove('active'); });
+    tabs.forEach(function(t)  { t.classList.remove('active'); });
+    var page = document.getElementById('page-' + id);
+    var tab  = document.querySelector('[data-page="' + id + '"]');
+    if (page) page.classList.add('active');
+    if (tab)  tab.classList.add('active');
+    try { localStorage.setItem(NAV_KEY, id); } catch(e) {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  tabs.forEach(function(t) {
+    t.addEventListener('click', function() { showPage(t.dataset.page); });
+  });
+
+  // Restore last active tab on load
+  try {
+    var saved = localStorage.getItem(NAV_KEY);
+    if (saved === 'silabas' || saved === 'palavras') showPage(saved);
+  } catch(e) {}
+})();
+</script>
+
+
+<!-- ══════════════════════════════════
+     APP 1 — SÍLABAS SCRIPT
+══════════════════════════════════ -->
+<script>
+(function() {
+  var container = document.getElementById('page-silabas');
+
+  var SK = 'cartoes_v1';
+  var S = {};
+  try { S = JSON.parse(localStorage.getItem(SK) || '{}'); } catch(e) {}
+  var save = function() { try { localStorage.setItem(SK, JSON.stringify(S)); } catch(e) {} };
+
+  var rows = function(c) { return Array.from(c.querySelectorAll('.syl-row')); };
+  var rKey = function(cId, syl) { return cId + '_' + syl; };
+  var xKey = function(cId, syl) { return cId + '_x_' + syl; };
+  var cKey = function(cId)      { return 'c_' + cId; };
+
+  function countDone(card) {
+    var cId = card.dataset.card;
+    return rows(card).filter(function(r) { return !!S[rKey(cId, r.dataset.syl)]; }).length;
+  }
+
+  function applyRow(row) {
+    var card = row.closest('.syl-card');
+    var cId  = card.dataset.card;
+    var syl  = row.dataset.syl;
+    var cDone = !!S[cKey(cId)];
+    var done = cDone || !!S[rKey(cId, syl)];
+    row.classList.toggle('done', done);
+    row.querySelector('.syl-check').classList.toggle('done', done);
+    var res = S[xKey(cId, syl)];
+    row.classList.toggle('res-ok',  res === 'ok');
+    row.classList.toggle('res-err', res === 'err');
+    row.querySelector('.rb-ok').classList.toggle('active',  res === 'ok');
+    row.querySelector('.rb-err').classList.toggle('active', res === 'err');
+  }
+
+  function apply() {
+    var totalAll = 0, doneAll = 0;
+
+    container.querySelectorAll('.syl-card').forEach(function(card) {
+      var cId   = card.dataset.card;
+      var total = rows(card).length;
+      totalAll += total;
+
+      rows(card).forEach(function(r) { applyRow(r); });
+
+      var realDone = !!S[cKey(cId)] ? total : countDone(card);
+      doneAll += realDone;
+
+      card.classList.toggle('all-done', realDone === total);
+      card.querySelector('.card-done-btn').classList.toggle('done', realDone === total);
+
+      var fill  = document.getElementById('mf-' + cId);
+      var label = document.getElementById('ml-' + cId);
+
+      var okCount  = rows(card).filter(function(r) { return S[xKey(cId, r.dataset.syl)] === 'ok';  }).length;
+      var errCount = rows(card).filter(function(r) { return S[xKey(cId, r.dataset.syl)] === 'err'; }).length;
+      var labelParts = [];
+      if (okCount)  labelParts.push('✓' + okCount);
+      if (errCount) labelParts.push('✗' + errCount);
+
+      if (fill)  fill.style.width = (total ? realDone / total * 100 : 0) + '%';
+      if (label) label.textContent = labelParts.length ? labelParts.join(' ') : realDone + '/' + total;
+    });
+
+    var pct = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
+    document.getElementById('gfill').style.width  = pct + '%';
+    document.getElementById('glabel').textContent = pct + '%';
+  }
+
+  function toggleCard(card) {
+    var cId  = card.dataset.card;
+    var next = !S[cKey(cId)];
+    if (next) S[cKey(cId)] = true; else delete S[cKey(cId)];
+    rows(card).forEach(function(r) {
+      var k = rKey(cId, r.dataset.syl);
+      if (next) S[k] = true; else delete S[k];
+    });
+    apply(); save();
+  }
+
+  function toggleRow(row) {
+    var card = row.closest('.syl-card');
+    var cId  = card.dataset.card;
+    var k    = rKey(cId, row.dataset.syl);
+    if (S[k]) delete S[k]; else S[k] = true;
+    var total = rows(card).length;
+    var done  = rows(card).filter(function(r) { return !!S[rKey(cId, r.dataset.syl)]; }).length;
+    if (done === total) S[cKey(cId)] = true; else delete S[cKey(cId)];
+    apply(); save();
+  }
+
+  function setResult(row, result) {
+    var card = row.closest('.syl-card');
+    var cId  = card.dataset.card;
+    var k    = xKey(cId, row.dataset.syl);
+    if (S[k] === result) delete S[k]; else S[k] = result;
+    apply(); save();
+  }
+
+  container.querySelectorAll('.syl-card').forEach(function(card) {
+    card.querySelector('.card-header').addEventListener('click', function(e) {
+      if (e.target.closest('[data-action="ctoggle"]')) return;
+      card.classList.toggle('open');
+    });
+
+    card.querySelector('[data-action="ctoggle"]').addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleCard(card);
+    });
+
+    card.querySelectorAll('.syl-row').forEach(function(row) {
+      row.querySelector('[data-action="rtoggle"]').addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleRow(row);
+      });
+      row.querySelector('[data-action="ok"]').addEventListener('click', function(e) {
+        e.stopPropagation();
+        setResult(row, 'ok');
+      });
+      row.querySelector('[data-action="err"]').addEventListener('click', function(e) {
+        e.stopPropagation();
+        setResult(row, 'err');
+      });
+      row.addEventListener('click', function() { toggleRow(row); });
+    });
+  });
+
+  apply();
+})();
+</script>
+
+
+<!-- ══════════════════════════════════
+     APP 2 — PALAVRAS SCRIPT
+══════════════════════════════════ -->
+<script>
+(function() {
+
+const PACKS = [{"id": "sec-01", "title": "Cartão 01", "words": [{"letter": "B", "theme": "b", "syl": "BI", "word": "bico", "emoji": "🐦"}, {"letter": "C", "theme": "c", "syl": "CU", "word": "cura", "emoji": "💊"}, {"letter": "G", "theme": "g", "syl": "GO", "word": "gola", "emoji": "👕"}, {"letter": "M", "theme": "m", "syl": "MU", "word": "mula", "emoji": "🐴"}, {"letter": "R", "theme": "r", "syl": "RA", "word": "rabo", "emoji": "🦊"}, {"letter": "S", "theme": "s", "syl": "SI", "word": "sítio", "emoji": "🏡"}, {"letter": "V", "theme": "v", "syl": "VU", "word": "vulto", "emoji": "👤"}]}, {"id": "sec-02", "title": "Cartão 02", "words": [{"letter": "B", "theme": "b", "syl": "BI", "word": "bife", "emoji": "🥩"}, {"letter": "D", "theme": "d", "syl": "DA", "word": "dado", "emoji": "🎲"}, {"letter": "J", "theme": "j", "syl": "JA", "word": "janela", "emoji": "🪟"}, {"letter": "M", "theme": "m", "syl": "MU", "word": "muro", "emoji": "🧱"}, {"letter": "R", "theme": "r", "syl": "RA", "word": "raio", "emoji": "⚡"}, {"letter": "S", "theme": "s", "syl": "SO", "word": "sol", "emoji": "☀️"}]}, {"id": "sec-03", "title": "Cartão 03", "words": [{"letter": "B", "theme": "b", "syl": "BI", "word": "bicho", "emoji": "🐞"}, {"letter": "D", "theme": "d", "syl": "DA", "word": "dama", "emoji": "👸"}, {"letter": "J", "theme": "j", "syl": "JA", "word": "jato", "emoji": "✈️"}, {"letter": "N", "theme": "n", "syl": "NA", "word": "nariz", "emoji": "👃"}, {"letter": "R", "theme": "r", "syl": "RA", "word": "ramo", "emoji": "🌿"}, {"letter": "S", "theme": "s", "syl": "SO", "word": "sofá", "emoji": "🛋️"}]}, {"id": "sec-04", "title": "Cartão 04", "words": [{"letter": "B", "theme": "b", "syl": "BI", "word": "bilhete", "emoji": "🎫"}, {"letter": "D", "theme": "d", "syl": "DA", "word": "data", "emoji": "📅"}, {"letter": "J", "theme": "j", "syl": "JA", "word": "jarra", "emoji": "🏺"}, {"letter": "N", "theme": "n", "syl": "NA", "word": "nada", "emoji": "🏊"}, {"letter": "R", "theme": "r", "syl": "RE", "word": "rede", "emoji": "🕸️"}, {"letter": "S", "theme": "s", "syl": "SO", "word": "sono", "emoji": "😴"}]}, {"id": "sec-05", "title": "Cartão 05", "words": [{"letter": "B", "theme": "b", "syl": "BO", "word": "bola", "emoji": "⚽"}, {"letter": "D", "theme": "d", "syl": "DA", "word": "dança", "emoji": "💃"}, {"letter": "J", "theme": "j", "syl": "JA", "word": "jardim", "emoji": "🌷"}, {"letter": "N", "theme": "n", "syl": "NA", "word": "natal", "emoji": "🎄"}, {"letter": "R", "theme": "r", "syl": "RE", "word": "rei", "emoji": "🤴"}, {"letter": "S", "theme": "s", "syl": "SO", "word": "sorte", "emoji": "🍀"}]}, {"id": "sec-06", "title": "Cartão 06", "words": [{"letter": "B", "theme": "b", "syl": "BO", "word": "bolo", "emoji": "🎂"}, {"letter": "D", "theme": "d", "syl": "DE", "word": "dedo", "emoji": "☝️"}, {"letter": "J", "theme": "j", "syl": "JE", "word": "jegue", "emoji": "🐴"}, {"letter": "N", "theme": "n", "syl": "NA", "word": "nave", "emoji": "🚀"}, {"letter": "R", "theme": "r", "syl": "RE", "word": "resto", "emoji": "🍽️"}, {"letter": "S", "theme": "s", "syl": "SU", "word": "susto", "emoji": "😱"}]}, {"id": "sec-07", "title": "Cartão 07", "words": [{"letter": "B", "theme": "b", "syl": "BO", "word": "boca", "emoji": "👄"}, {"letter": "D", "theme": "d", "syl": "DE", "word": "dente", "emoji": "🦷"}, {"letter": "J", "theme": "j", "syl": "JE", "word": "jeca", "emoji": "🧢"}, {"letter": "N", "theme": "n", "syl": "NE", "word": "neve", "emoji": "❄️"}, {"letter": "R", "theme": "r", "syl": "RE", "word": "relógio", "emoji": "⏰"}, {"letter": "S", "theme": "s", "syl": "SU", "word": "sujo", "emoji": "🧽"}]}, {"id": "sec-08", "title": "Cartão 08", "words": [{"letter": "B", "theme": "b", "syl": "BO", "word": "bota", "emoji": "🥾"}, {"letter": "D", "theme": "d", "syl": "DE", "word": "dever", "emoji": "📘"}, {"letter": "J", "theme": "j", "syl": "JI", "word": "jipe", "emoji": "🚙"}, {"letter": "N", "theme": "n", "syl": "NE", "word": "neto", "emoji": "👦"}, {"letter": "R", "theme": "r", "syl": "RI", "word": "rio", "emoji": "🏞️"}, {"letter": "S", "theme": "s", "syl": "SU", "word": "sumo", "emoji": "🧃"}]}, {"id": "sec-09", "title": "Cartão 09", "words": [{"letter": "C", "theme": "c", "syl": "CA", "word": "casa", "emoji": "🏠"}, {"letter": "D", "theme": "d", "syl": "DO", "word": "doce", "emoji": "🍬"}, {"letter": "J", "theme": "j", "syl": "JO", "word": "jogo", "emoji": "🎮"}, {"letter": "N", "theme": "n", "syl": "NI", "word": "ninho", "emoji": "🪺"}, {"letter": "R", "theme": "r", "syl": "RI", "word": "rico", "emoji": "💎"}, {"letter": "S", "theme": "s", "syl": "SU", "word": "surdo", "emoji": "🦻"}]}, {"id": "sec-10", "title": "Cartão 10", "words": [{"letter": "C", "theme": "c", "syl": "CA", "word": "cama", "emoji": "🛏️"}, {"letter": "D", "theme": "d", "syl": "DO", "word": "dono", "emoji": "🙋"}, {"letter": "J", "theme": "j", "syl": "JO", "word": "joelho", "emoji": "🦵"}, {"letter": "N", "theme": "n", "syl": "NI", "word": "nível", "emoji": "📏"}, {"letter": "R", "theme": "r", "syl": "RI", "word": "riso", "emoji": "😄"}, {"letter": "T", "theme": "t", "syl": "TU", "word": "tulipa", "emoji": "🌷"}]}, {"id": "sec-11", "title": "Cartão 11", "words": [{"letter": "C", "theme": "c", "syl": "CA", "word": "caju", "emoji": "🍎"}, {"letter": "D", "theme": "d", "syl": "DO", "word": "doca", "emoji": "🚢"}, {"letter": "J", "theme": "j", "syl": "JO", "word": "jovem", "emoji": "🧑"}, {"letter": "N", "theme": "n", "syl": "NO", "word": "nota", "emoji": "📝"}, {"letter": "R", "theme": "r", "syl": "RO", "word": "rosa", "emoji": "🌹"}, {"letter": "T", "theme": "t", "syl": "TU", "word": "tudo", "emoji": "✨"}]}, {"id": "sec-12", "title": "Cartão 12", "words": [{"letter": "C", "theme": "c", "syl": "CA", "word": "capa", "emoji": "🧥"}, {"letter": "F", "theme": "f", "syl": "FA", "word": "faca", "emoji": "🔪"}, {"letter": "J", "theme": "j", "syl": "JO", "word": "jornal", "emoji": "📰"}, {"letter": "N", "theme": "n", "syl": "NO", "word": "nome", "emoji": "🏷️"}, {"letter": "R", "theme": "r", "syl": "RO", "word": "roda", "emoji": "🛞"}, {"letter": "T", "theme": "t", "syl": "TU", "word": "tubo", "emoji": "🧪"}]}, {"id": "sec-13", "title": "Cartão 13", "words": [{"letter": "C", "theme": "c", "syl": "CA", "word": "carro", "emoji": "🚗"}, {"letter": "F", "theme": "f", "syl": "FA", "word": "fada", "emoji": "🧚"}, {"letter": "J", "theme": "j", "syl": "JU", "word": "juiz", "emoji": "⚖️"}, {"letter": "N", "theme": "n", "syl": "NO", "word": "noite", "emoji": "🌙"}, {"letter": "R", "theme": "r", "syl": "RO", "word": "rosto", "emoji": "🙂"}, {"letter": "T", "theme": "t", "syl": "TU", "word": "turma", "emoji": "👥"}]}, {"id": "sec-14", "title": "Cartão 14", "words": [{"letter": "C", "theme": "c", "syl": "CE", "word": "cera", "emoji": "🕯️"}, {"letter": "F", "theme": "f", "syl": "FA", "word": "fala", "emoji": "🗣️"}, {"letter": "J", "theme": "j", "syl": "JU", "word": "juro", "emoji": "💰"}, {"letter": "N", "theme": "n", "syl": "NO", "word": "noiva", "emoji": "👰"}, {"letter": "R", "theme": "r", "syl": "RO", "word": "roupa", "emoji": "👕"}, {"letter": "V", "theme": "v", "syl": "VA", "word": "vaca", "emoji": "🐄"}]}, {"id": "sec-15", "title": "Cartão 15", "words": [{"letter": "C", "theme": "c", "syl": "CE", "word": "cedo", "emoji": "⏰"}, {"letter": "F", "theme": "f", "syl": "FA", "word": "farinha", "emoji": "🌾"}, {"letter": "J", "theme": "j", "syl": "JU", "word": "julho", "emoji": "📆"}, {"letter": "N", "theme": "n", "syl": "NU", "word": "nuvem", "emoji": "☁️"}, {"letter": "R", "theme": "r", "syl": "RU", "word": "rua", "emoji": "🛣️"}, {"letter": "V", "theme": "v", "syl": "VA", "word": "vale", "emoji": "🏞️"}]}, {"id": "sec-16", "title": "Cartão 16", "words": [{"letter": "C", "theme": "c", "syl": "CE", "word": "cervo", "emoji": "🦌"}, {"letter": "F", "theme": "f", "syl": "FI", "word": "figo", "emoji": "🫐"}, {"letter": "J", "theme": "j", "syl": "JU", "word": "junco", "emoji": "🌿"}, {"letter": "N", "theme": "n", "syl": "NU", "word": "nuca", "emoji": "🧑"}, {"letter": "R", "theme": "r", "syl": "RU", "word": "rumo", "emoji": "🧭"}, {"letter": "V", "theme": "v", "syl": "VA", "word": "vaso", "emoji": "🏺"}]}, {"id": "sec-17", "title": "Cartão 17", "words": [{"letter": "C", "theme": "c", "syl": "CI", "word": "circo", "emoji": "🎪"}, {"letter": "F", "theme": "f", "syl": "FI", "word": "fila", "emoji": "🚶"}, {"letter": "M", "theme": "m", "syl": "MI", "word": "milho", "emoji": "🌽"}, {"letter": "N", "theme": "n", "syl": "NU", "word": "número", "emoji": "🔢"}, {"letter": "R", "theme": "r", "syl": "RU", "word": "ruído", "emoji": "🔊"}, {"letter": "V", "theme": "v", "syl": "VA", "word": "valor", "emoji": "💎"}]}, {"id": "sec-18", "title": "Cartão 18", "words": [{"letter": "C", "theme": "c", "syl": "CI", "word": "cinco", "emoji": "5️⃣"}, {"letter": "F", "theme": "f", "syl": "FI", "word": "fio", "emoji": "🧵"}, {"letter": "M", "theme": "m", "syl": "MI", "word": "mimo", "emoji": "🎁"}, {"letter": "P", "theme": "p", "syl": "PI", "word": "pipa", "emoji": "🪁"}, {"letter": "S", "theme": "s", "syl": "SA", "word": "sapo", "emoji": "🐸"}, {"letter": "V", "theme": "v", "syl": "VE", "word": "vela", "emoji": "🕯️"}]}, {"id": "sec-19", "title": "Cartão 19", "words": [{"letter": "C", "theme": "c", "syl": "CI", "word": "cinto", "emoji": "🧷"}, {"letter": "F", "theme": "f", "syl": "FI", "word": "filho", "emoji": "🧒"}, {"letter": "M", "theme": "m", "syl": "MI", "word": "miolo", "emoji": "🍞"}, {"letter": "P", "theme": "p", "syl": "PI", "word": "pico", "emoji": "⛰️"}, {"letter": "S", "theme": "s", "syl": "SA", "word": "saco", "emoji": "👜"}, {"letter": "V", "theme": "v", "syl": "VE", "word": "vento", "emoji": "💨"}]}, {"id": "sec-20", "title": "Cartão 20", "words": [{"letter": "C", "theme": "c", "syl": "CO", "word": "coco", "emoji": "🥥"}, {"letter": "F", "theme": "f", "syl": "FO", "word": "foca", "emoji": "🦭"}, {"letter": "M", "theme": "m", "syl": "MI", "word": "minha", "emoji": "🙋"}, {"letter": "P", "theme": "p", "syl": "PI", "word": "pilha", "emoji": "🔋"}, {"letter": "S", "theme": "s", "syl": "SA", "word": "sala", "emoji": "🛋️"}, {"letter": "V", "theme": "v", "syl": "VE", "word": "verde", "emoji": "🟢"}]}, {"id": "sec-21", "title": "Cartão 21", "words": [{"letter": "C", "theme": "c", "syl": "CO", "word": "cola", "emoji": "🧴"}, {"letter": "F", "theme": "f", "syl": "FO", "word": "fogo", "emoji": "🔥"}, {"letter": "M", "theme": "m", "syl": "MO", "word": "morango", "emoji": "🍓"}, {"letter": "P", "theme": "p", "syl": "PI", "word": "pião", "emoji": "🪀"}, {"letter": "S", "theme": "s", "syl": "SA", "word": "saia", "emoji": "👗"}, {"letter": "V", "theme": "v", "syl": "VE", "word": "veia", "emoji": "🩸"}]}, {"id": "sec-22", "title": "Cartão 22", "words": [{"letter": "C", "theme": "c", "syl": "CO", "word": "copo", "emoji": "🥤"}, {"letter": "F", "theme": "f", "syl": "FO", "word": "foto", "emoji": "📷"}, {"letter": "M", "theme": "m", "syl": "MO", "word": "moda", "emoji": "👗"}, {"letter": "P", "theme": "p", "syl": "PO", "word": "polvo", "emoji": "🐙"}, {"letter": "S", "theme": "s", "syl": "SE", "word": "sela", "emoji": "🐴"}, {"letter": "V", "theme": "v", "syl": "VO", "word": "volta", "emoji": "🔄"}]}, {"id": "sec-23", "title": "Cartão 23", "words": [{"letter": "C", "theme": "c", "syl": "CO", "word": "cobra", "emoji": "🐍"}, {"letter": "F", "theme": "f", "syl": "FO", "word": "folha", "emoji": "🍃"}, {"letter": "M", "theme": "m", "syl": "MO", "word": "moto", "emoji": "🏍️"}, {"letter": "P", "theme": "p", "syl": "PO", "word": "pote", "emoji": "🫙"}, {"letter": "S", "theme": "s", "syl": "SE", "word": "sede", "emoji": "🥤"}, {"letter": "V", "theme": "v", "syl": "VO", "word": "voto", "emoji": "🗳️"}]}, {"id": "sec-24", "title": "Cartão 24", "words": [{"letter": "C", "theme": "c", "syl": "CO", "word": "corda", "emoji": "🪢"}, {"letter": "G", "theme": "g", "syl": "GO", "word": "gosto", "emoji": "😋"}, {"letter": "M", "theme": "m", "syl": "MO", "word": "moeda", "emoji": "🪙"}, {"letter": "P", "theme": "p", "syl": "PO", "word": "ponto", "emoji": "📍"}, {"letter": "S", "theme": "s", "syl": "SE", "word": "seco", "emoji": "🏜️"}, {"letter": "V", "theme": "v", "syl": "VO", "word": "você", "emoji": "🙂"}]}, {"id": "sec-25", "title": "Cartão 25", "words": [{"letter": "C", "theme": "c", "syl": "CU", "word": "cubo", "emoji": "🎲"}, {"letter": "G", "theme": "g", "syl": "GO", "word": "goma", "emoji": "🍬"}, {"letter": "M", "theme": "m", "syl": "MU", "word": "mundo", "emoji": "🌍"}, {"letter": "P", "theme": "p", "syl": "PO", "word": "poder", "emoji": "💪"}, {"letter": "S", "theme": "s", "syl": "SI", "word": "sino", "emoji": "🔔"}, {"letter": "V", "theme": "v", "syl": "VO", "word": "voz", "emoji": "🎤"}]}, {"id": "sec-26", "title": "Cartão 26", "words": [{"letter": "C", "theme": "c", "syl": "CU", "word": "cuco", "emoji": "🕰️"}, {"letter": "G", "theme": "g", "syl": "GO", "word": "gordo", "emoji": "🧍"}, {"letter": "M", "theme": "m", "syl": "MU", "word": "mudo", "emoji": "🤐"}, {"letter": "R", "theme": "r", "syl": "RA", "word": "rato", "emoji": "🐭"}, {"letter": "S", "theme": "s", "syl": "SI", "word": "sinal", "emoji": "🚦"}, {"letter": "V", "theme": "v", "syl": "VU", "word": "vulcão", "emoji": "🌋"}]}];
+
+const STORAGE_KEY = 'silabas_cards_mistos_v1';
+const THEME_COLORS = {
+  b: { main:'#FF4757', soft:'#FFF0F2', ink:'#B53141' },
+  c: { main:'#FF7F50', soft:'#FFF4F0', ink:'#B24C28' },
+  d: { main:'#FFA502', soft:'#FFFBF0', ink:'#A46300' },
+  f: { main:'#2ED573', soft:'#F0FFF6', ink:'#167E42' },
+  g: { main:'#1ABC9C', soft:'#F0FFFC', ink:'#0C6D5B' },
+  j: { main:'#1E90FF', soft:'#F0F8FF', ink:'#145899' },
+  m: { main:'#9B59B6', soft:'#FBF0FF', ink:'#6D3288' },
+  n: { main:'#E84393', soft:'#FFF0F8', ink:'#962860' },
+  p: { main:'#FF7043', soft:'#FFF4F0', ink:'#A9401F' },
+  r: { main:'#26C281', soft:'#F0FFF8', ink:'#0F7752' },
+  s: { main:'#F39C12', soft:'#FFFBF0', ink:'#8B5B00' },
+  t: { main:'#6C3483', soft:'#F8F0FF', ink:'#4E2362' },
+  v: { main:'#E91E63', soft:'#FFF0F5', ink:'#991242' }
+};
+const SECTION_GRADIENTS = [
+  'linear-gradient(135deg,#ff6b9d,#ff9a3c)',
+  'linear-gradient(135deg,#06d6a0,#118ab2)',
+  'linear-gradient(135deg,#9b5de5,#f15bb5)',
+  'linear-gradient(135deg,#ff9f1c,#ffbf69)',
+  'linear-gradient(135deg,#118ab2,#6c63ff)',
+  'linear-gradient(135deg,#ef476f,#ffd166)'
+];
+
+let state = {};
+let currentPackId = null;
+
+try {
+  state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+} catch (e) {
+  state = {};
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function slug(text) {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_|_$/g, '');
+}
+
+function wordKey(packId, word) { return `w_${packId}_${slug(word)}`; }
+function packKey(packId)       { return `p_${packId}`; }
+function getPack(packId)       { return PACKS.find(pack => pack.id === packId); }
+function getWordDone(packId, word) { return !!state[wordKey(packId, word)]; }
+
+function getPackDone(packId) {
+  const pack = getPack(packId);
+  if (!pack) return false;
+  return pack.words.every(item => getWordDone(packId, item.word));
+}
+
+function setPackState(packId, shouldComplete) {
+  const pack = getPack(packId);
+  if (!pack) return;
+  pack.words.forEach(item => {
+    const key = wordKey(packId, item.word);
+    if (shouldComplete) state[key] = true;
+    else delete state[key];
+  });
+}
+
+function togglePack(packId) {
+  const pack = getPack(packId);
+  if (!pack) return;
+  const shouldComplete = pack.words.some(item => !getWordDone(packId, item.word));
+  setPackState(packId, shouldComplete);
+  saveState();
+  renderAll();
+}
+
+function toggleWord(packId, word) {
+  const key = wordKey(packId, word);
+  if (state[key]) delete state[key];
+  else state[key] = true;
+  saveState();
+  renderAll();
+}
+
+function getGlobalProgress() {
+  const allWords = PACKS.flatMap(pack => pack.words);
+  const total = allWords.length;
+  const done = allWords.filter(item => getWordDone(PACKS.find(pack => pack.words.includes(item)).id, item.word)).length;
+  return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+}
+
+function updateGlobalProgress() {
+  const { pct } = getGlobalProgress();
+  document.getElementById('global-progress-fill').style.width = pct + '%';
+  document.getElementById('global-progress-label').textContent = `${pct}%`;
+}
+
+function renderOverview() {
+  const grid = document.getElementById('sections-grid');
+  grid.innerHTML = PACKS.map((pack, index) => {
+    const doneCount = pack.words.filter(item => getWordDone(pack.id, item.word)).length;
+    const total = pack.words.length;
+    const completed = doneCount === total && total > 0;
+    const gradient = SECTION_GRADIENTS[index % SECTION_GRADIENTS.length];
+    const preview = pack.words.map(item => `<span class="chip">${item.emoji} ${item.word}</span>`).join('');
+    return `
+      <article class="section-card ${completed ? 'completed' : ''}" data-pack-id="${pack.id}">
+        <div class="section-top">
+          <div class="section-badge" style="background:${gradient};">${pack.title}</div>
+          <button
+            class="section-check ${completed ? 'is-done' : ''}"
+            style="color:${completed ? '#5f4eb3' : '#7c6bb4'}; background:${completed ? '#5f4eb3' : 'transparent'};"
+            data-action="toggle-pack"
+            data-pack-id="${pack.id}"
+            title="Marcar cartão todo"
+          >${completed ? '✓' : '○'}</button>
+        </div>
+        <div>
+          <h3>${total === 6 ? '6 palavras misturadas' : total + ' palavras misturadas'}</h3>
+          <div class="section-meta">Sílabas e letras embaralhadas no mesmo cartão</div>
+        </div>
+        <div class="chip-list">${preview}</div>
+        <div class="section-actions">
+          <button class="open-btn" style="background:${gradient};" data-action="open-pack" data-pack-id="${pack.id}">Abrir cartão</button>
+          <div class="mini-progress">${doneCount} / ${total}</div>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  grid.querySelectorAll('[data-action="toggle-pack"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePack(btn.dataset.packId);
+    });
+  });
+
+  grid.querySelectorAll('[data-action="open-pack"]').forEach(btn => {
+    btn.addEventListener('click', () => openPack(btn.dataset.packId));
+  });
+
+  grid.querySelectorAll('.section-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('button')) return;
+      openPack(card.dataset.packId);
+    });
+  });
+}
+
+function renderDetail() {
+  if (!currentPackId) return;
+  const pack = getPack(currentPackId);
+  const doneCount = pack.words.filter(item => getWordDone(pack.id, item.word)).length;
+  const packDone = doneCount === pack.words.length;
+  document.getElementById('detail-title').textContent = pack.title;
+  document.getElementById('detail-subtitle').textContent = `${pack.words.length} palavras no cartão · ${doneCount} concluídas`;
+  const detailToggle = document.getElementById('detail-toggle');
+  detailToggle.textContent = packDone ? '✓' : '○';
+  detailToggle.className = 'detail-check' + (packDone ? ' is-done' : '');
+  detailToggle.style.color = packDone ? '#5f4eb3' : '#7c6bb4';
+  detailToggle.style.background = packDone ? '#5f4eb3' : 'transparent';
+
+  const list = document.getElementById('word-list');
+  list.innerHTML = pack.words.map((item) => {
+    const palette = THEME_COLORS[item.theme] || { main:'#888', soft:'#f4f4f4', ink:'#444' };
+    const isDone = getWordDone(pack.id, item.word);
+    return `
+      <article class="word-panel ${isDone ? 'completed' : ''}" data-word="${item.word}">
+        <div class="word-summary" data-action="expand-word">
+          <div class="word-pill" style="background:${palette.main};">${item.syl}</div>
+          <div class="word-main">
+            <h3 style="color:${palette.ink};">${item.word}</h3>
+            <p>Toque para ampliar a palavra e a ilustração</p>
+          </div>
+          <div class="word-actions">
+            <span class="expand-hint">Expandir</span>
+            <button
+              class="word-check ${isDone ? 'is-done' : ''}"
+              style="color:${palette.main}; background:${isDone ? palette.main : 'transparent'};"
+              data-action="toggle-word"
+              data-word="${item.word}"
+              title="Marcar palavra"
+            >${isDone ? '✓' : '○'}</button>
+          </div>
+        </div>
+        <div class="word-body">
+          <div class="word-body-inner">
+            <div class="word-illustration" style="background:${palette.soft};">${item.emoji}</div>
+            <div class="big-word" style="color:${palette.ink};">${item.word}</div>
+            <div class="word-caption">Sílaba inicial: <strong>${item.syl}</strong> · Palavra individual deste cartão</div>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  list.querySelectorAll('[data-action="toggle-word"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleWord(pack.id, btn.dataset.word);
+    });
+  });
+
+  list.querySelectorAll('[data-action="expand-word"]').forEach(summary => {
+    summary.addEventListener('click', () => {
+      const panel = summary.closest('.word-panel');
+      panel.classList.toggle('expanded');
+    });
+  });
+}
+
+function openPack(packId) {
+  currentPackId = packId;
+  document.getElementById('overview-screen').classList.remove('active');
+  document.getElementById('detail-screen').classList.add('active');
+  renderDetail();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+  currentPackId = null;
+  document.getElementById('detail-screen').classList.remove('active');
+  document.getElementById('overview-screen').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderAll() {
+  updateGlobalProgress();
+  renderOverview();
+  if (currentPackId) renderDetail();
+}
+
+document.getElementById('back-btn').addEventListener('click', goBack);
+document.getElementById('detail-toggle').addEventListener('click', () => {
+  if (!currentPackId) return;
+  togglePack(currentPackId);
+});
+
+renderAll();
+
+})();
+</script>
+
+</body>
+</html>
