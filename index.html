@@ -972,7 +972,9 @@ body { font-family: 'Nunito', sans-serif; background: #FFF9F0; }
 
   function countDone(card) {
     var cId = card.dataset.card;
-    return rows(card).filter(function(r) { return !!S[rKey(cId, r.dataset.syl)]; }).length;
+    return rows(card).filter(function(r) {
+      return !!S[rKey(cId, r.dataset.syl)] && !!S[wKey(cId, r.dataset.syl)];
+    }).length;
   }
 
   function applyRow(row) {
@@ -980,10 +982,11 @@ body { font-family: 'Nunito', sans-serif; background: #FFF9F0; }
     var cId  = card.dataset.card;
     var syl  = row.dataset.syl;
     var cDone = !!S[cKey(cId)];
-    var done = cDone || !!S[rKey(cId, syl)];
-    row.classList.toggle('done', done);
-    row.querySelector('.syl-check').classList.toggle('done', done);
-    row.querySelector('.syl-check-write').classList.toggle('done', !!S[wKey(cId, syl)]);
+    var rDone = cDone || !!S[rKey(cId, syl)];
+    var wDone = cDone || !!S[wKey(cId, syl)];
+    row.classList.toggle('done', rDone && wDone);
+    row.querySelector('.syl-check').classList.toggle('done', rDone);
+    row.querySelector('.syl-check-write').classList.toggle('done', wDone);
     var res = S[xKey(cId, syl)];
     row.classList.toggle('res-ok',  res === 'ok');
     row.classList.toggle('res-err', res === 'err');
@@ -1033,8 +1036,9 @@ body { font-family: 'Nunito', sans-serif; background: #FFF9F0; }
     var next = !S[cKey(cId)];
     if (next) S[cKey(cId)] = true; else delete S[cKey(cId)];
     rows(card).forEach(function(r) {
-      var k = rKey(cId, r.dataset.syl);
-      if (next) S[k] = true; else delete S[k];
+      var rk = rKey(cId, r.dataset.syl);
+      var wk = wKey(cId, r.dataset.syl);
+      if (next) { S[rk] = true; S[wk] = true; } else { delete S[rk]; delete S[wk]; }
     });
     apply(); save();
   }
@@ -1045,7 +1049,9 @@ body { font-family: 'Nunito', sans-serif; background: #FFF9F0; }
     var k    = rKey(cId, row.dataset.syl);
     if (S[k]) delete S[k]; else S[k] = true;
     var total = rows(card).length;
-    var done  = rows(card).filter(function(r) { return !!S[rKey(cId, r.dataset.syl)]; }).length;
+    var done  = rows(card).filter(function(r) {
+      return !!S[rKey(cId, r.dataset.syl)] && !!S[wKey(cId, r.dataset.syl)];
+    }).length;
     if (done === total) S[cKey(cId)] = true; else delete S[cKey(cId)];
     apply(); save();
   }
@@ -1055,6 +1061,11 @@ body { font-family: 'Nunito', sans-serif; background: #FFF9F0; }
     var cId  = card.dataset.card;
     var k    = wKey(cId, row.dataset.syl);
     if (S[k]) delete S[k]; else S[k] = true;
+    var total = rows(card).length;
+    var done  = rows(card).filter(function(r) {
+      return !!S[rKey(cId, r.dataset.syl)] && !!S[wKey(cId, r.dataset.syl)];
+    }).length;
+    if (done === total) S[cKey(cId)] = true; else delete S[cKey(cId)];
     apply(); save();
   }
 
